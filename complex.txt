@@ -1,0 +1,27 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+// Match complex numbers like: 3+4i, -2.5-6i, 0+1i, 5-2.3i
+[+-]?[0-9]+(\.[0-9]+)?[+-][0-9]+(\.[0-9]+)?[iI]   { printf("\"%s\" is a complex number.\n", yytext); }
+
+// Match imaginary-only numbers like: 4i, -3.2i, i, -i
+[+-]?([0-9]+(\.[0-9]+)?)?[iI]                     { printf("\"%s\" is a complex number (imaginary part only).\n", yytext); }
+
+// Match only real numbers (should not be complex)
+[+-]?[0-9]+(\.[0-9]+)?                            { printf("\"%s\" is NOT a complex number (only real part).\n", yytext); }
+
+// Ignore spaces and newlines
+[ \t\n]                                           ;
+
+.                                                 { printf("\"%s\" is invalid.\n", yytext); }
+
+%%
+
+int main() {
+    printf("Enter a number: ");
+    yylex(); // Start lexical analysis
+    return 0;
+}
